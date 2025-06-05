@@ -72,6 +72,7 @@ impl WebauthnActor {
             DEFAULT_AUTHENTICATOR_TIMEOUT,
             None,
             None,
+            None,
         );
 
         let swan = WebauthnBuilder::new(&rp_id, &rp_origin)

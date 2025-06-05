@@ -243,6 +243,7 @@ pub struct WebauthnBuilder<'a> {
     allowed_origins: Vec<Url>,
     allow_subdomains: bool,
     allow_any_port: bool,
+    allow_cross_origin: bool,
     timeout: Duration,
     algorithms: Vec<COSEAlgorithm>,
     user_presence_only_security_keys: bool,
@@ -299,6 +300,7 @@ impl<'a> WebauthnBuilder<'a> {
                 allowed_origins: vec![rp_origin.to_owned()],
                 allow_subdomains: false,
                 allow_any_port: false,
+                allow_cross_origin: false,
                 timeout: DEFAULT_AUTHENTICATOR_TIMEOUT,
                 algorithms: COSEAlgorithm::secure_algs(),
                 user_presence_only_security_keys: false,
@@ -324,6 +326,12 @@ impl<'a> WebauthnBuilder<'a> {
     /// Setting this flag skips port checks on origin matches
     pub fn allow_any_port(mut self, allow: bool) -> Self {
         self.allow_any_port = allow;
+        self
+    }
+
+    /// Setting this flag allows cross-origin requests to be considered valid in Webauthn operations.
+    pub fn allow_cross_origin(mut self, allow: bool) -> Self {
+        self.allow_cross_origin = allow;
         self
     }
 
@@ -408,6 +416,7 @@ impl<'a> WebauthnBuilder<'a> {
                 self.timeout,
                 Some(self.allow_subdomains),
                 Some(self.allow_any_port),
+                Some(self.allow_cross_origin),
             ),
             algorithms: self.algorithms,
             user_presence_only_security_keys: self.user_presence_only_security_keys,
